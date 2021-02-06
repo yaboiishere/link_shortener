@@ -81,7 +81,7 @@ defmodule LinkShortenerWeb.UrlController do
         meta_attrs = [
           %{name: "og:type", content: "website"},
           %{name: "og:description", content: url.description},
-          %{property: "og:image", content: image_url}
+          %{property: "og:image", content: url.image}
         ]
 
         # <!-- Primary Meta Tags -->
