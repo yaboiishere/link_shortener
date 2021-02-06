@@ -1,0 +1,23 @@
+<%= form_for @changeset, Routes.url_path(@conn, :create), [as: :url_data], fn f -> %>
+  <label>
+    Link Name: <%= text_input f, :url_name %>
+  </label>
+
+  <label>
+    Url: <%= text_input f, :url %>
+  </label>
+
+  <label>
+    Title: <%= text_input f, :title %>
+  </label>
+
+  <label>
+    Description: <%= text_input f, :description %>
+  </label>
+
+  <label>
+    Image: <%= text_input f, :image %>
+  </label>
+
+  <%= submit "Submit" %>
+<% end %>
