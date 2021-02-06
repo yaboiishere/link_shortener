@@ -5,9 +5,11 @@ defmodule LinkShortener.Repo.Migrations.CreateUrls do
     create table(:urls) do
       add :url_name, :string
       add :url, :string
-      add :image, :string
+      add :image, :text
       add :title, :string
       add :description, :string
+      add :image_type, :string
+      add :image_name, :string
 
       timestamps()
     end

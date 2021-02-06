@@ -1,4 +1,4 @@
-<%= form_for @changeset, Routes.url_path(@conn, :create), [as: :url_data], fn f -> %>
+<%= form_for @changeset, Routes.url_path(@conn, :create), [as: :url_data, multipart: true], fn f -> %>
   <label>
     Link Name: <%= text_input f, :url_name %>
   </label>
@@ -16,7 +16,7 @@
   </label>
 
   <label>
-    Image: <%= text_input f, :image %>
+    <%= file_input f, :image %>
   </label>
 
   <%= submit "Submit" %>
