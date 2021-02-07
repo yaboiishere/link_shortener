@@ -64,16 +64,6 @@ defmodule LinkShortenerWeb.UrlController do
         |> render(:"404")
 
       url ->
-        # meta_image =
-        #   url.image
-        #   |> case do
-        #     nil ->
-        #       nil
-
-        #     _img ->
-        #       nil
-        #   end
-
         meta_attrs = [
           %{name: "og:type", content: "website"},
           %{name: "og:title", content: url.title},
@@ -87,7 +77,8 @@ defmodule LinkShortenerWeb.UrlController do
           %{
             property: "twitter:image",
             content: "#{LinkShortenerWeb.Router.Helpers.url(conn)}/img/#{url.image_name}"
-          }
+          },
+          %{name: "twitter:card", content: "summary_large_image"}
         ]
 
         # <!-- Primary Meta Tags -->
