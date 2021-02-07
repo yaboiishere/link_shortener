@@ -17,7 +17,6 @@ defmodule LinkShortenerWeb.UrlController do
             "image_name" => img.filename
           })
       end
-      |> IO.inspect()
 
     %Url{}
     |> LinkShortener.Url.changeset(data)
@@ -65,23 +64,21 @@ defmodule LinkShortenerWeb.UrlController do
         |> render(:"404")
 
       url ->
-        image_url =
+        meta_image =
           url.image
           |> case do
             nil ->
               nil
 
-            img ->
-              dir = System.tmp_dir!()
-              tmp_file = Path.join(dir, url.image_name)
-              File.write!(tmp_file, img)
-              Path.expand(tmp_file)
+            _img ->
+              %{property: "og:image", content: "#{LinkShortenerWeb.Router.Helpers.url(conn)}/img/#{url.image_name}"}
           end
 
         meta_attrs = [
           %{name: "og:type", content: "website"},
           %{name: "og:description", content: url.description},
-          %{property: "og:image", content: url.image}
+          %{name: "og:title", content: url.title},
+          meta_image
         ]
 
         # <!-- Primary Meta Tags -->
@@ -102,12 +99,32 @@ defmodule LinkShortenerWeb.UrlController do
         # <meta property="twitter:title" content="Meta Tags — Preview, Edit and Generate">
         # <meta property="twitter:description" content="With Meta Tags you can edit and experiment with your content then preview how your webpage will look on Google, Facebook, Twitter and more!">
         # <meta property="twitter:image" content="https://metatags.io/assets/meta-tags-16a33a6a8531e519cc0936fbba0ad904e52d35f34a46c97a2c9f6f7dd7d336f2.png">
-        IO.inspect(url)
-
         conn
         |> render("show.html", meta_attrs: meta_attrs, url: url)
 
         # |> redirect(external: url.url)
+    end
+  end
+
+  def show(conn, %{"img_name" => img_name}) do
+    Url
+    |> where([u], u.image_name == ^img_name)
+    |> order_by([u], desc: u.id)
+    |> limit([u], 1)
+    |> LinkShortener.Repo.one()
+    |> case do
+      nil ->
+        conn
+        |> render(LinkShortenerWeb.ErrorView)
+
+      url ->
+        {:ok, image} =
+          url.image
+          |> Base.decode64()
+
+        conn
+        |> put_resp_content_type(url.image_type)
+        |> send_resp(200, image)
     end
   end
 end

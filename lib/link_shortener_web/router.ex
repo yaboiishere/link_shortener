@@ -18,7 +18,7 @@ defmodule LinkShortenerWeb.Router do
 
     get "/", UrlController, :new
     resources "/", UrlController, only: [:create]
-
+    get "/img/:img_name", UrlController, :show
     get "/:url_name", UrlController, :show
   end
 end
