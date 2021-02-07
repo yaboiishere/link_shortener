@@ -41,13 +41,13 @@ defmodule LinkShortenerWeb.UrlController do
         conn
         |> put_status(:bad_request)
         |> put_flash(:error, errors)
-        |> render("new.html", changeset: changeset)
+        |> render("new.html", changeset: changeset, meta_attrs: [])
     end
   end
 
   def new(conn, _params) do
     changeset = LinkShortener.Url.changeset(%LinkShortener.Url{})
-    render(conn, "new.html", changeset: changeset)
+    render(conn, "new.html", changeset: changeset, meta_attrs: [])
   end
 
   def show(conn, %{"url_name" => url_name}) do
@@ -76,32 +76,38 @@ defmodule LinkShortenerWeb.UrlController do
 
         meta_attrs = [
           %{name: "og:type", content: "website"},
-          %{name: "og:description", content: url.description},
           %{name: "og:title", content: url.title},
+          %{name: "og:description", content: url.description},
           %{
             property: "og:image",
+            content: "#{LinkShortenerWeb.Router.Helpers.url(conn)}/img/#{url.image_name}"
+          },
+          %{name: "twitter:title", content: url.title},
+          %{name: "twitter:description", content: url.description},
+          %{
+            property: "twitter:image",
             content: "#{LinkShortenerWeb.Router.Helpers.url(conn)}/img/#{url.image_name}"
           }
         ]
 
         # <!-- Primary Meta Tags -->
-        # <title>Meta Tags — Preview, Edit and Generate</title>
-        # <meta name="title" content="Meta Tags — Preview, Edit and Generate">
-        # <meta name="description" content="With Meta Tags you can edit and experiment with your content then preview how your webpage will look on Google, Facebook, Twitter and more!">
+        # <title>asdasd</title>
+        # <meta name="title" content="asdasd">
+        # <meta name="description" content="asdasdasdasdasdasdasd">
 
         # <!-- Open Graph / Facebook -->
         # <meta property="og:type" content="website">
-        # <meta property="og:url" content="https://metatags.io/">
-        # <meta property="og:title" content="Meta Tags — Preview, Edit and Generate">
-        # <meta property="og:description" content="With Meta Tags you can edit and experiment with your content then preview how your webpage will look on Google, Facebook, Twitter and more!">
-        # <meta property="og:image" content="https://metatags.io/assets/meta-tags-16a33a6a8531e519cc0936fbba0ad904e52d35f34a46c97a2c9f6f7dd7d336f2.png">
+        # <meta property="og:url" content="https://lshrtn.herokuapp.com/img">
+        # <meta property="og:title" content="asdasd">
+        # <meta property="og:description" content="asdasdasdasdasdasdasd">
+        # <meta property="og:image" content="http://example.com/img/photo_2020-03-06_19-02-40.jpg">
 
         # <!-- Twitter -->
         # <meta property="twitter:card" content="summary_large_image">
-        # <meta property="twitter:url" content="https://metatags.io/">
-        # <meta property="twitter:title" content="Meta Tags — Preview, Edit and Generate">
-        # <meta property="twitter:description" content="With Meta Tags you can edit and experiment with your content then preview how your webpage will look on Google, Facebook, Twitter and more!">
-        # <meta property="twitter:image" content="https://metatags.io/assets/meta-tags-16a33a6a8531e519cc0936fbba0ad904e52d35f34a46c97a2c9f6f7dd7d336f2.png">
+        # <meta property="twitter:url" content="https://lshrtn.herokuapp.com/img">
+        # <meta property="twitter:title" content="asdasd">
+        # <meta property="twitter:description" content="asdasdasdasdasdasdasd">
+        # <meta property="twitter:image" content="http://example.com/img/photo_2020-03-06_19-02-40.jpg">
         conn
         |> render("show.html", meta_attrs: meta_attrs, url: url)
 
