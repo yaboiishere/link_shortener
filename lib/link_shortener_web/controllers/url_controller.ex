@@ -27,7 +27,7 @@ defmodule LinkShortenerWeb.UrlController do
 
         conn
         |> put_flash(:info, "Link created successfully")
-        |> render("new.html", changeset: changeset)
+        |> render("new.html", changeset: changeset, meta_attrs: [])
 
       {:error, %Ecto.Changeset{} = changeset} ->
         errors =
