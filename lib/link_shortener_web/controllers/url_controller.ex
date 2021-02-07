@@ -60,7 +60,7 @@ defmodule LinkShortenerWeb.UrlController do
       nil ->
         conn
         |> put_status(:not_found)
-        |> put_view(HelloWeb.ErrorView)
+        |> put_view(LinkShortenerWeb.ErrorView)
         |> render(:"404")
 
       url ->
